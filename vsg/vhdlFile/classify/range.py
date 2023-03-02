@@ -1,5 +1,9 @@
 
+from vsg.token import subtype_declaration
+
 from vsg.vhdlFile import utils
+
+from vsg.vhdlFile.classify import identifier
 
 
 def detect(iToken, lObjects):
@@ -11,12 +15,9 @@ def detect(iToken, lObjects):
     '''
     if check_for_range_attribute_name(iToken, lObjects):
         return True
-
-    if detect_direction(iToken, lObjects):
+    if check_for_range_subtype_name(iToken, lObjects):
         return True
-
-    # FIXME: Can we detect a subtype? Return false if not a subtype.
-    return True
+    return detect_direction(iToken, lObjects)
 
 def check_for_range_attribute_name(iToken, lObjects):
     iParens = 0
@@ -29,6 +30,10 @@ def check_for_range_attribute_name(iToken, lObjects):
             return True
 
     return False
+
+
+def check_for_range_subtype_name(iToken, lObjects):
+    return identifier.classify(iToken, lObjects, subtype_declaration.identifier)
 
 
 def token_is_matching_close_parenthesis(iParens):
