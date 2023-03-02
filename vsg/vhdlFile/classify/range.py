@@ -3,8 +3,6 @@ from vsg.token import subtype_declaration
 
 from vsg.vhdlFile import utils
 
-from vsg.vhdlFile.classify import identifier
-
 
 def detect(iToken, lObjects):
     '''
@@ -15,9 +13,9 @@ def detect(iToken, lObjects):
     '''
     if check_for_range_attribute_name(iToken, lObjects):
         return True
-    if check_for_range_subtype_name(iToken, lObjects):
+    if detect_direction(iToken, lObjects):
         return True
-    return detect_direction(iToken, lObjects)
+    return check_for_range_subtype_name(iToken, lObjects)
 
 def check_for_range_attribute_name(iToken, lObjects):
     iParens = 0
@@ -33,7 +31,12 @@ def check_for_range_attribute_name(iToken, lObjects):
 
 
 def check_for_range_subtype_name(iToken, lObjects):
-    return identifier.classify(iToken, lObjects, subtype_declaration.identifier)
+    iCurrent = utils.find_next_token(iToken, lObjects)
+    try:
+        subtype_declaration.identifier(lObjects[iCurrent].get_value())
+    except TypeError:
+        return False
+    return True
 
 
 def token_is_matching_close_parenthesis(iParens):
