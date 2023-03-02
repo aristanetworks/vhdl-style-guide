@@ -34,7 +34,7 @@ def classify(iToken, lObjects):
 
     iCurrent = utils.assign_next_token_required('if', token.if_keyword, iCurrent, lObjects)
 
-    ### Need to handle alternaive_label ###
+    ### Need to handle alternative_label ###
 
     iCurrent = condition.classify_until(['generate'], iCurrent, lObjects)
 
@@ -53,6 +53,8 @@ def classify(iToken, lObjects):
 
     if utils.is_next_token('else', iCurrent, lObjects):
         iCurrent = utils.assign_next_token_required('else', token.else_keyword, iCurrent, lObjects)
+
+        iCurrent = condition.classify_until(['generate'], iCurrent, lObjects)
 
         iCurrent = utils.assign_next_token_required('generate', token.generate_keyword, iCurrent, lObjects)
 
