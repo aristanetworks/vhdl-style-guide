@@ -6,12 +6,17 @@ def detect(iToken, lObjects):
     '''
     range ::=
         range_attribute_name
+      | *subtype*_name
       | simple_expression direction simple_expression
     '''
     if check_for_range_attribute_name(iToken, lObjects):
         return True
-    return detect_direction(iToken, lObjects)
 
+    if detect_direction(iToken, lObjects):
+        return True
+
+    # FIXME: Can we detect a subtype? Return false if not a subtype.
+    return True
 
 def check_for_range_attribute_name(iToken, lObjects):
     iParens = 0
